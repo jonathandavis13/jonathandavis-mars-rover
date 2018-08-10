@@ -2,10 +2,12 @@ package marsrovers.interfaces.service;
 
 import marsrovers.model.MarsRover;
 
+import java.util.List;
+
 
 public interface PlatueService {
 
-    MarsRover[] moveRovers(Integer maxX, Integer maxY, MarsRover...rovers);
+    List<MarsRover> moveRovers(Integer maxX, Integer maxY, List<MarsRover> rovers);
 
 
 }

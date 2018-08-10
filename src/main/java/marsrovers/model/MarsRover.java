@@ -99,8 +99,7 @@ public class MarsRover {
         if (getyCoordinate() != null ? !getyCoordinate().equals(marsRover.getyCoordinate()) : marsRover.getyCoordinate() != null)
             return false;
         if (getName() != null ? !getName().equals(marsRover.getName()) : marsRover.getName() != null) return false;
-        if (getDirection() != marsRover.getDirection()) return false;
-        return getInstructions() != null ? getInstructions().equals(marsRover.getInstructions()) : marsRover.getInstructions() == null;
+        return getDirection() == marsRover.getDirection();
     }
 
     @Override
@@ -109,7 +108,6 @@ public class MarsRover {
         result = 31 * result + (getyCoordinate() != null ? getyCoordinate().hashCode() : 0);
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + (getDirection() != null ? getDirection().hashCode() : 0);
-        result = 31 * result + (getInstructions() != null ? getInstructions().hashCode() : 0);
         return result;
     }
 }

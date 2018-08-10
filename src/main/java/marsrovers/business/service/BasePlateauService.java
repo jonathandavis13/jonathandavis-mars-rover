@@ -1,25 +1,25 @@
 package marsrovers.business.service;
 
 import marsrovers.exception.InvalidDirectionException;
+import marsrovers.exception.RoverCollisionException;
+import marsrovers.exception.RoverOutOfBoundsException;
 import marsrovers.interfaces.service.PlatueService;
-import marsrovers.model.Direction;
 import marsrovers.model.Instruction;
 import marsrovers.model.MarsRover;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import static marsrovers.model.Direction.*;
 
-public class BasePlatueService implements PlatueService {
+public class BasePlateauService implements PlatueService {
 
-    private Logger logger = LoggerFactory.getLogger(BasePlatueService.class);
+    private Logger logger = LoggerFactory.getLogger(BasePlateauService.class);
 
     @Override
-    public MarsRover[] moveRovers(Integer maxX, Integer maxY, MarsRover... rovers) {
+    public List<MarsRover> moveRovers(Integer maxX, Integer maxY, List<MarsRover> rovers) {
 
         for (MarsRover rover: rovers) {
             for(Instruction instruction : rover.getInstructions()){
@@ -32,10 +32,11 @@ public class BasePlatueService implements PlatueService {
                         break;
                     case MOVE_FORWARD:
                         moveFoward(rover);
+                        sameLocation(rover,rovers);
+                        offPlateau(maxX,maxY,rover);
                         break;
                     default:
-                        //TODO exception here
-                        logger.error("Invalid instruction given to rover : [{}]",instruction);
+                        logger.error("Invalid instruction [{}] given to rover ",instruction);
                 }
             }
 
@@ -97,7 +98,26 @@ public class BasePlatueService implements PlatueService {
             case WEST :
                 rover.decrementXCoordinate();
                 break;
-            default:  throw new InvalidDirectionException();
+            default:
+                logger.error("Invalid direction [{}] given to rover ",rover.getDirection());
+        }
+    }
+
+    private void sameLocation(MarsRover currentRover, List<MarsRover> otherRovers){
+        long numberOfRoversInSameLocation = otherRovers.stream().
+                filter(r -> currentRover.getyCoordinate() == r.getyCoordinate()
+                        && currentRover.getxCoordinate() == r.getxCoordinate()).count();
+        if( numberOfRoversInSameLocation > 1 ){
+            logger.error("The Instructions for the Rover [{}] will cause a collision with another rover", currentRover.toString());
+            throw new RoverCollisionException();
+        }
+    }
+
+    private void offPlateau(Integer maxX, Integer maxY, MarsRover rover){
+        if( maxX < rover.getxCoordinate() || maxY < rover.getyCoordinate()
+                || 0 > rover.getyCoordinate() || 0 > rover.getxCoordinate()){
+            logger.error("The Instructions for the Rover will cause it to fall off the Plateau");
+            throw new RoverOutOfBoundsException();
         }
     }
 }
