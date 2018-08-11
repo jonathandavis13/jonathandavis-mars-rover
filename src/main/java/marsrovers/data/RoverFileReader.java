@@ -61,7 +61,8 @@ public class RoverFileReader {
                 WatchEvent watchEvent = event;
                 Path filename = (Path) watchEvent.context();
                 logger.info("filename : {}",filename.getFileName());
-
+                File folder = new File("input/"+filename);
+                processFile(folder);
 
             }
 
@@ -72,6 +73,17 @@ public class RoverFileReader {
         }
     }
 
+    private void processFile(File file){
+        try{
+            logger.info("reading [{}]",file.getPath());
+            String roverDestination = fileParseService.parseFile(file);
+            logger.info("Rover Final Destination : [{}]",roverDestination);
+            roverFileWriter.writeFile(roverDestination);
+        }catch (Exception e){
+            logger.error(e.toString(),e);
+        }
+    }
+
 
     public void readExistingFiles(){
         File folder = new File("input/");
@@ -79,14 +91,7 @@ public class RoverFileReader {
             logger.info("[{}] is  a valid directory",folder.getPath());
         }
         for(File file : folder.listFiles()){
-            try{
-                logger.info("reading [{}]",file.getPath());
-                String roverDestination = fileParseService.parseFile(file);
-                logger.info("Rover Final Destination : [{}]",roverDestination);
-                roverFileWriter.writeFile(roverDestination);
-            }catch (Exception e){
-                logger.error(e.toString(),e);
-            }
+            processFile(file);
 
         }
     }
