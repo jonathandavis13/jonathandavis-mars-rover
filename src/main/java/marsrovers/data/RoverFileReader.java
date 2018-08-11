@@ -26,6 +26,12 @@ public class RoverFileReader {
     private WatchService watchService;
 
     @PostConstruct
+    private void start(){
+        readExistingFiles();
+        processFiles();
+    }
+
+
     void processFiles() {
         logger.info("start process files");
         while(true){
@@ -60,13 +66,23 @@ public class RoverFileReader {
     }
 
 
+    public void readExistingFiles(){
+        File folder = new File("input/");
+        if (folder.isDirectory()){
+            logger.info("[{}] is  a valid directory",folder.getPath());
+        }
+        for(File file : folder.listFiles()){
+            logger.info("reading [{}]",file.getPath());
+            fileReader(file);
+        }
+    }
 
 
-    public String fileReader(){
-        File file = new File("input/test_file.txt");
+
+    public String fileReader(File file){
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            logger.trace(reader.readLine().toString());
+            reader.lines().forEach(line -> logger.info(line));
         } catch (FileNotFoundException e) {
             logger.error(e.toString(),e);
         } catch (IOException e) {

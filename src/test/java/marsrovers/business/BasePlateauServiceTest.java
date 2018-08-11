@@ -1,4 +1,4 @@
-package marsrovers.business.service;
+package marsrovers.business;
 
 
 import static org.junit.jupiter.api.Assertions.assertAll;

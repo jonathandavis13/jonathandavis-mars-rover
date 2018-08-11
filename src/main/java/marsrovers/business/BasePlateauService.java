@@ -1,8 +1,8 @@
-package marsrovers.business.service;
+package marsrovers.business;
 
 import marsrovers.exception.RoverCollisionException;
 import marsrovers.exception.RoverOutOfBoundsException;
-import marsrovers.interfaces.service.PlatueService;
+import marsrovers.interfaces.PlatueService;
 import marsrovers.model.Instruction;
 import marsrovers.model.MarsRover;
 import org.slf4j.Logger;

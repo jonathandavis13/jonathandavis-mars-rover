@@ -1,4 +1,4 @@
-package marsrovers;
+package marsrovers.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,9 @@ public class ReaderConfiguration {
 
     @Bean
     public Path path(){
-        Path path = Paths.get("/Users/jonathandavis/IdeaProjects/marsrovers/input" +
-                "");
+        Path path = Paths.get("input");
+        logger.info(" pwd : [{}]",System.getProperty("user.dir"));
+
         try {
             path.register(watchService(), ENTRY_CREATE);
         } catch (IOException e) {

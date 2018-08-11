@@ -1,4 +1,4 @@
-package marsrovers.interfaces.service;
+package marsrovers.interfaces;
 
 import marsrovers.model.MarsRover;
 
