@@ -41,8 +41,10 @@ public class BaseFileParseService implements FileParseService{
                      plateauBoundaries = parsePlateauBoundaries(lines[0].toString(), i);
                 } else {
                     MarsRover rover =  parseRoverLocation(lines[i].toString(),i);
-                    i++;
-                    rover.setInstructions(parseRoverInstructions(lines[i].toString(),i));
+                    if(i+1 < lines.length){
+                        i++;
+                        rover.setInstructions(parseRoverInstructions(lines[i].toString(),i));
+                    }
                     rovers.add(rover);
                 }
             }
