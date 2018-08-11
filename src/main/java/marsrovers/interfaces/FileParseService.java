@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface FileParseService {
 
-    void parseFile(File file);
+    String parseFile(File file);
 
     List<Instruction> parseRoverInstructions(String line, int lineNumber);
 

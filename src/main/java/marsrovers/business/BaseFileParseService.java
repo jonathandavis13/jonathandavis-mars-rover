@@ -2,11 +2,13 @@ package marsrovers.business;
 
 import marsrovers.exception.UnableToParseFileException;
 import marsrovers.interfaces.FileParseService;
+import marsrovers.interfaces.PlatueService;
 import marsrovers.model.Direction;
 import marsrovers.model.Instruction;
 import marsrovers.model.MarsRover;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -20,17 +22,23 @@ public class BaseFileParseService implements FileParseService{
 
     private Logger logger = LoggerFactory.getLogger(BaseFileParseService.class);
 
+    @Autowired
+    PlatueService platueService;
+
     @Override
-    public void parseFile(File file) {
+    public String parseFile(File file) {
+        Map<String, Integer> plateauBoundaries = null;
+        List<MarsRover> rovers = new ArrayList<>();
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             StringBuffer buffer = new StringBuffer();
 
+
             Object[] lines = reader.lines().toArray();
-            List<MarsRover> rovers = new ArrayList<>();
             for(int i = 0 ;i < lines.length; i++){
                 if(i == 0){
-                    parsePlateauBoundaries(lines[0].toString(), i);
+                     plateauBoundaries = parsePlateauBoundaries(lines[0].toString(), i);
                 } else {
                     MarsRover rover =  parseRoverLocation(lines[i].toString(),i);
                     i++;
@@ -41,6 +49,8 @@ public class BaseFileParseService implements FileParseService{
         } catch (FileNotFoundException e) {
             logger.error(e.toString(),e);
         }
+        List<MarsRover> roverList = platueService.moveRovers(plateauBoundaries.get("x"), plateauBoundaries.get("y"),rovers);
+        return outputText(roverList);
     }
 
 
@@ -125,7 +135,7 @@ public class BaseFileParseService implements FileParseService{
             buffer.append(r.getyCoordinate()+ " ");
             buffer.append(directionToText(r.getDirection()) + "\n");
         });
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
     private String directionToText(Direction direction){

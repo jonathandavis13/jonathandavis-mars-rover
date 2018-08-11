@@ -29,6 +29,9 @@ public class RoverFileReader {
     @Autowired
     private FileParseService fileParseService;
 
+    @Autowired
+    private RoverFileWriter roverFileWriter;
+
     @PostConstruct
     private void start(){
         readExistingFiles();
@@ -76,8 +79,15 @@ public class RoverFileReader {
             logger.info("[{}] is  a valid directory",folder.getPath());
         }
         for(File file : folder.listFiles()){
-            logger.info("reading [{}]",file.getPath());
-            fileParseService.parseFile(file);
+            try{
+                logger.info("reading [{}]",file.getPath());
+                String roverDestination = fileParseService.parseFile(file);
+                logger.info("Rover Final Destination : [{}]",roverDestination);
+                roverFileWriter.writeFile(roverDestination);
+            }catch (Exception e){
+                logger.error(e.toString(),e);
+            }
+
         }
     }
 

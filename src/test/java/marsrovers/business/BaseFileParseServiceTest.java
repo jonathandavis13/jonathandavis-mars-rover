@@ -95,7 +95,7 @@ public class BaseFileParseServiceTest {
     @Test
     public void outputText(){
         String actual = fileParseService.outputText(getRoversForHappyPath());
-        assertEquals("1 2 N\n3 3 E\n",actual);
+        assertEquals("1 2 N\n3 3 E",actual);
 
     }
 
