@@ -1,6 +1,5 @@
 package marsrovers.business.service;
 
-import marsrovers.exception.InvalidDirectionException;
 import marsrovers.exception.RoverCollisionException;
 import marsrovers.exception.RoverOutOfBoundsException;
 import marsrovers.interfaces.service.PlatueService;
@@ -8,12 +7,13 @@ import marsrovers.model.Instruction;
 import marsrovers.model.MarsRover;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import static marsrovers.model.Direction.*;
 
+@Service
 public class BasePlateauService implements PlatueService {
 
     private Logger logger = LoggerFactory.getLogger(BasePlateauService.class);
@@ -39,9 +39,7 @@ public class BasePlateauService implements PlatueService {
                         logger.error("Invalid instruction [{}] given to rover ",instruction);
                 }
             }
-
             logger.info(rover.toString());
-
         }
         return rovers;
     }
@@ -60,7 +58,8 @@ public class BasePlateauService implements PlatueService {
             case WEST :
                 rover.setDirection(SOUTH);
                 break;
-            default: throw new InvalidDirectionException();
+            default:
+                logger.error("Invalid Direction [{}] for rover [{}]",rover.getDirection(),rover.toString());
         }
 
     }
@@ -80,7 +79,8 @@ public class BasePlateauService implements PlatueService {
             case WEST :
                 rover.setDirection(NORTH);
                 break;
-            default:  throw new InvalidDirectionException();
+            default:
+                logger.error("Invalid Direction [{}] for rover [{}]",rover.getDirection(),rover.toString());
         }
     }
 
