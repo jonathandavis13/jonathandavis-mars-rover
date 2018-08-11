@@ -1,6 +1,7 @@
 package marsrovers.data;
 
 
+import marsrovers.interfaces.FileParseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class RoverFileReader {
 
     @Autowired
     private WatchService watchService;
+
+    @Autowired
+    private FileParseService fileParseService;
 
     @PostConstruct
     private void start(){
@@ -73,23 +77,8 @@ public class RoverFileReader {
         }
         for(File file : folder.listFiles()){
             logger.info("reading [{}]",file.getPath());
-            fileReader(file);
+            fileParseService.parseFile(file);
         }
-    }
-
-
-
-    public String fileReader(File file){
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            reader.lines().forEach(line -> logger.info(line));
-        } catch (FileNotFoundException e) {
-            logger.error(e.toString(),e);
-        } catch (IOException e) {
-            logger.error(e.toString(),e);
-        }
-
-        return "";
     }
 
 }

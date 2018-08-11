@@ -12,6 +12,10 @@ public class MarsRover {
     private Direction direction;
     private List<Instruction> instructions = new ArrayList<Instruction>();
 
+    public MarsRover() {
+
+    }
+
     public MarsRover(Integer xCoordinate, Integer yCoordinate, String name, Direction direction) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
@@ -58,6 +62,8 @@ public class MarsRover {
     public void addInstruction(Instruction instruction){
         instructions.add(instruction);
     }
+
+    public void setInstructions(List<Instruction> instructions){ this.instructions = instructions;}
 
     public void incrementYCoordinate(){
         yCoordinate++;
