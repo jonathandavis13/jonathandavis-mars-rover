@@ -36,6 +36,9 @@ public class BaseFileParseService implements FileParseService{
 
 
             Object[] lines = reader.lines().toArray();
+            if(lines == null || lines.length < 3){
+                throw new UnableToParseFileException("Not enough information in file for rovers");
+            }
             for(int i = 0 ;i < lines.length; i++){
                 if(i == 0){
                      plateauBoundaries = parsePlateauBoundaries(lines[0].toString(), i);

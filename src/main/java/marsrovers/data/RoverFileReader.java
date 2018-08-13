@@ -20,6 +20,8 @@ public class RoverFileReader {
 
     private Logger logger = LoggerFactory.getLogger(RoverFileReader.class);
 
+    private final static String INPUT_FOLDER = "input/";
+
     @Autowired
     private Path path;
 
@@ -61,7 +63,7 @@ public class RoverFileReader {
                 WatchEvent watchEvent = event;
                 Path filename = (Path) watchEvent.context();
                 logger.info("filename : {}",filename.getFileName());
-                File folder = new File("input/"+filename);
+                File folder = new File(INPUT_FOLDER+filename);
                 processFile(folder);
 
             }
@@ -86,7 +88,7 @@ public class RoverFileReader {
 
 
     public void readExistingFiles(){
-        File folder = new File("input/");
+        File folder = new File(INPUT_FOLDER);
         if (folder.isDirectory()){
             logger.info("[{}] is  a valid directory",folder.getPath());
         }
